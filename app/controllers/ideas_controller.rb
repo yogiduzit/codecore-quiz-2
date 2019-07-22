@@ -15,6 +15,9 @@ class IdeasController < ApplicationController
 
   def show
    @idea = find_idea
+
+   @review = Review.new
+   @reviews = @idea.reviews
   end
 
   def create
