@@ -1,0 +1,36 @@
+<div class="main-container">
+  <div class="user-errs-container">
+    <% if @user.errors.messages.any? %>
+      <ul class="form-errors">
+        <% @user.errors.full_messages.each do |err| %>
+          <li class="form-error"><%= err %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+  <div class="user-new-container">
+    <%= form_with model: @user, local: true do |f| %>
+      <div class="form-group">
+        <%= f.label :first_name %>
+        <%= f.text_field :first_name %>
+      </div>
+      <div class="form-group">
+        <%= f.label :last_name %>
+        <%= f.text_field :last_name %>
+      </div>
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.text_field :email %>
+      </div>
+      <div class="form-group">
+        <%= f.label :password %>
+        <%= f.text_field :password %>
+      </div>
+      <div class="form-group">
+        <%= f.label :password_confirmation %>
+        <%= f.text_field :password_confirmation %>
+      </div>
+      <%= f.submit %>
+    <% end %>
+  </div>
+</div>
