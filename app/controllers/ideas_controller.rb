@@ -1,4 +1,6 @@
 class IdeasController < ApplicationController
+
+  before_action :authenticate_user!, except: [:home, :index, :show]
   def home
   end
 
