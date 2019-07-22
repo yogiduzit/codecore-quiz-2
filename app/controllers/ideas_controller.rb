@@ -1,6 +1,7 @@
 class IdeasController < ApplicationController
 
   before_action :authenticate_user!, except: [:home, :index, :show]
+  before_action :authorize_user!, only: [:edit, :update, :destroy]
   def home
   end
 
@@ -48,10 +49,15 @@ class IdeasController < ApplicationController
 
   private
   def idea_params
-    params.require(:idea).permit(:title, :body)
+    params.require(:idea).permit(:title, :body, :user_id)
   end
 
   def find_idea
     Idea.find(params[:id])
+  end
+
+  def authorize_user!
+    @idea = find_idea
+    redirect_to home_page_path unless can?(:crud, @idea)
   end
 end
