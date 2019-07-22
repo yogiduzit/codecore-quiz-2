@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe IdeasController, type: :controller do
+  def current_user
+    @current_user ||= FactoryBot.create(:user)
+  end
   describe "#home" do
     it "must render the home page" do 
       get :home
@@ -9,16 +12,29 @@ RSpec.describe IdeasController, type: :controller do
     end
   end
   describe "#new" do
-    it "must render the new page" do
-      get :new
+    context "with signed in user" do 
+      before do 
+        session[:user_id] = current_user.id
+      end
 
-      expect(response).to render_template(:new)
+      it "must render the new page" do
+        get :new
+
+        expect(response).to render_template(:new)
+      end
+
+      it "must create a new instance variable of type Idea" do
+        get :new
+
+        expect(assigns(:idea)).to be_a_new(Idea)
+      end
     end
+    context "without signed in user" do
+      it "must redirect to sign in page" do
+        get :new
 
-    it "must create a new instance variable of type Idea" do
-      get :new
-
-      expect(assigns(:idea)).to be_a_new(Idea)
+        expect(response).to redirect_to(new_sessions_path)
+      end
     end
   end
 
@@ -59,53 +75,76 @@ RSpec.describe IdeasController, type: :controller do
   end
 
   describe "#create" do
-    context "valid parameters" do
-      def valid_request
+    context "without user signed in" do
+      it "must redirect to sign in page" do
         post(:create, params: {
           idea: FactoryBot.attributes_for(:idea)
         })
-      end
 
-      it "must create a new entry in the database" do
-        before_create = Idea.count
-
-        valid_request
-        after_create = Idea.count
-
-        expect(after_create).to eq(before_create + 1)
-      end
-      it "must redirect to the show page" do
-        valid_request
-        
-        expect(response).to redirect_to(idea_path(Idea.last))
-      end
+        expect(response).to redirect_to(new_sessions_path)
+      end 
     end
-    context "invalid parameters" do
-      def invalid_request
-        post(:create, params: {
-          idea: FactoryBot.attributes_for(:idea, title: nil)
-        })
-      end
-      it "must not save an entry in the database" do
-        before_create = Idea.count
-
-        invalid_request
-        after_create = Idea.count
-
-        expect(after_create).to eq(before_create)
+    context "with user signed in" do
+      before do
+        session[:user_id] = current_user.id
       end
 
-      it "must assign an invalid variable" do
-        invalid_request
+      context "valid parameters" do
+        def valid_request
+          post(:create, params: {
+            idea: {
+              title: "HAHAHAHHAHAHA",
+              body: "YOYOYOYOYOYOYOYO",
+              user_id: current_user.id
+            }
+          })
+        end
 
-        expect(assigns(:idea)).to be_a_new(Idea)
-        expect(assigns(:idea).valid?).to be(false)
+        it "must create a new entry in the database" do
+          before_create = Idea.count
+
+          valid_request
+          after_create = Idea.count
+
+          expect(after_create).to eq(before_create + 1)
+        end
+        it "must redirect to the show page" do
+          valid_request
+          
+          expect(response).to redirect_to(idea_path(Idea.last))
+        end
       end
+      context "invalid parameters" do
+        def invalid_request
+          post(:create, params: {
+            idea: {
+              title: nil,
+              body: "KFBNSJKJS M<S",
+              user_id: current_user.id
+            }
+          })
+        end
+        it "must not save an entry in the database" do
+          before_create = Idea.count
 
-      it "must render the new template" do
-        invalid_request
+          invalid_request
+          after_create = Idea.count
 
-        expect(response).to render_template(:new)
+          expect(after_create).to eq(before_create)
+        end
+
+        it "must assign an invalid variable" do
+          invalid_request
+
+          expect(assigns(:idea)).to be_a_new(Idea)
+          expect(assigns(:idea).valid?).to be(false)
+        end
+
+        it "must render the new template" do
+          invalid_request
+
+          expect(response).to render_template(:new)
+        end
       end
     end
   end
