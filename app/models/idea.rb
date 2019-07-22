@@ -3,4 +3,5 @@ class Idea < ApplicationRecord
   validates :body, presence: true, uniqueness: true
 
   belongs_to :user
+  has_many :reviews, dependent: :destroy
 end
