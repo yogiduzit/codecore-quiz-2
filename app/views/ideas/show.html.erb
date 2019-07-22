@@ -2,7 +2,42 @@
   <div class="idea-container">
     <h3><%= @idea.title %></h3>
     <p><%= @idea.body%></p>
-    <%= link_to "Edit", edit_idea_path(@idea) %>
-    <%= link_to "Delete", idea_path(@idea), method: :delete%>
+    <% if can?(:crud, @idea) %>
+      <%= link_to "Edit", edit_idea_path(@idea) %>
+      <%= link_to "Delete", idea_path(@idea), method: :delete %>
+    <% end %>
+  </div>
+  <div class="reviews-main-container">
+    <% if @review.errors.messages.any? %>
+      <div class="review-errors">
+        <ul class="errors">
+          <% @review.errors.full_messages.each do |err| %>
+            <li class="error"><%= err %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="review-form">
+      <h2>Create review</h2>
+      <%= form_with model: @review, url: idea_reviews_path(@idea), local: true do |f| %>
+        <div class="form-group">
+          <%= f.label :body%>
+          <%= f.text_field :body, class: "form-control" %>
+        </div>
+        <%= f.submit "Submit Review"%>
+      <% end %>
+    </div>
+    <% if !@reviews.nil? %>
+      <div class="reviews-container">
+        <% @reviews.each do |review| %>
+          <div class="review">
+            <p><%= review.body %></p>
+            <% if can?(:crud, review) %>
+              <%= link_to "Delete", idea_review_path(@idea, review), method: :delete %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 </div>
