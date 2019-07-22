@@ -21,6 +21,7 @@ RSpec.describe IdeasController, type: :controller do
       expect(assigns(:idea)).to be_a_new(Idea)
     end
   end
+
   describe "#index" do
     it "must render the index page" do
       get(:index)
@@ -32,6 +33,28 @@ RSpec.describe IdeasController, type: :controller do
       get :index
 
       assert_equal Idea.all, assigns(:ideas)
+    end
+  end
+
+  describe "#show" do
+    def request(idea)
+      get(:show, params: {
+        id: idea.id
+      })
+    end
+    it "must render the show template" do
+      idea = FactoryBot.create(:idea)
+
+      request(idea)
+
+      expect(response).to render_template(:show)
+    end
+    it "set an instance variable" do
+      idea = FactoryBot.create(:idea)
+
+      request(idea)
+
+      assert_equal assigns(:idea), idea
     end
   end
 
