@@ -10,6 +10,10 @@ class IdeasController < ApplicationController
     @ideas = Idea.all
   end
 
+  def show
+   @idea = find_idea
+  end
+
   def create
     @idea = Idea.new idea_params
 
