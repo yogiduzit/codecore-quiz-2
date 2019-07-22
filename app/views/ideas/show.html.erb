@@ -1,0 +1,8 @@
+<div class="main-container">
+  <div class="idea-container">
+    <h3><%= @idea.title %></h3>
+    <p><%= @idea.body%></p>
+    <%= link_to "Edit", edit_idea_path(@idea) %>
+    <%= link_to "Delete", idea_path(@idea), method: :delete%>
+  </div>
+</div>
