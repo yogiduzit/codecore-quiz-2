@@ -24,9 +24,9 @@
             <a class="nav-link" href="/ideas">Ideas</a>
           </li>
         </ul>
-        <div class="welcome">
+        <div class="welcome-container">
           <% if current_user.present? %>
-            <h6>Hello <%= current_user.first_name %> !</h6>
+            <h6 class="name-heading">Hello <%= current_user.first_name %> !</h6>
           <% end %>
         </div>
         <ul class="navbar-nav">

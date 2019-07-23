@@ -14,4 +14,25 @@
  *= require_self
  */
 
- @import "bootstrap"
+ @import "bootstrap";
+ @import "ideas.scss";
+
+ %d-flex-rnw {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+ #navbarNav {
+   @extend %d-flex-rnw;
+   align-items: center;
+ }
+ .welcome-container {
+  @extend %d-flex-rnw;
+   flex: 1;
+   justify-content: center;
+   align-items: center;
+   height: 40px;
+ }
+ .name-heading {
+   margin: 0;
+ }
