@@ -1,7 +1,7 @@
 <div class="main-container">
   <div class="form-errors-container">
     <% if @idea.errors.any? %>
-      <ul class="form-errors text-danger">
+      <ul class="form-errors text-danger border rounded border-danger">
         <% @idea.errors.full_messages.each do |err| %>
           <li class="form-error"><%= err %></li>
         <% end %>
@@ -9,7 +9,7 @@
     <% end %>
   </div>
   <div class="form-container">
-    <%= form_with model: @idea, local: true do |f| %>
+    <%= form_with model: @idea, local: true, class:"idea-form border border-primary p-3 rounded" do |f| %>
       <div id="form-group">
         <%= f.label :title %>
         <%= f.text_field :title, class: "form-control" %>
@@ -18,7 +18,7 @@
         <%= f.label :body %>
         <%= f.text_area :body, class: "form-control" %>
       </div>
-      <%= f.submit %>
+      <%= f.submit class: "btn btn-primary" %>
     <% end %>
   </div>
 </div>
