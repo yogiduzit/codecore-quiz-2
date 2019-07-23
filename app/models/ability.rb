@@ -40,8 +40,8 @@ class Ability
       review.user == user
     end
 
-    can(:crud, Like) do |like|
-      like.user == user
+    can(:like, Idea) do |idea|
+      user.present? && idea.user != user
     end
   end
 end
