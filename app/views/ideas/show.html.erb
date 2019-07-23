@@ -1,18 +1,28 @@
 <div class="main-container">
   <div class="idea-container">
-    <h3><%= @idea.title %></h3>
-    <p><%= @idea.body%></p>
-    <% if can?(:crud, @idea) %>
-      <%= link_to "Edit", edit_idea_path(@idea) %>
-      <%= link_to "Delete", idea_path(@idea), method: :delete %>
-    <% end %>
-    <% like = @idea.likes.find_by(user: current_user)%>
-    <% if like.nil? %>
-      <%= link_to "Like", idea_likes_path(@idea), method: :post %>
-    <% else %>
-      <%= link_to "Unlike", idea_like_path(@idea, like), method: :delete %>
-    <% end %>
+    <div class="idea-body border-top border-right border-left border-secondary rounded-top">
+      <h3><%= @idea.title %></h3>
+      <p><%= @idea.body%></p>
+    </div>
+    <div class="idea-secondary border-top border-right border-left border-secondary p-3">
+      <% if can?(:crud, @idea) %>
+        <%= link_to "Edit", edit_idea_path(@idea), class: "btn btn-secondary" %>
+        <%= link_to "Delete", idea_path(@idea), method: :delete, class: "btn btn-danger" %>
+      <% end %>
+      <% like = @idea.likes.find_by(user: current_user)%>
+      <% if like.nil? %>
+        <%= link_to "Like", idea_likes_path(@idea), method: :post, class: "btn btn-primary" %>
+      <% else %>
+        <%= link_to "Unlike", idea_like_path(@idea, like), method: :delete, class: "btn btn-warning" %>
+      <% end %>
+    </div>
+    <div class="idea-info-show border rounded-bottom border-secondary p-3">
+        <h6>By <%= @idea.user.first_name %></h6>
+        <h6><%= time_ago_in_words(@idea.created_at) %> ago</h6>
+        <h6 class="likes-holder">Likes - <%= @idea.likers.count %></h6>
+    </div>
   </div>
+  
   <div class="reviews-main-container">
     <% if @review.errors.messages.any? %>
       <div class="review-errors">
