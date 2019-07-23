@@ -6,6 +6,12 @@
       <%= link_to "Edit", edit_idea_path(@idea) %>
       <%= link_to "Delete", idea_path(@idea), method: :delete %>
     <% end %>
+    <% like = @idea.likes.find_by(user: current_user)%>
+    <% if like.nil? %>
+      <%= link_to "Like", idea_likes_path(@idea), method: :post %>
+    <% else %>
+      <%= link_to "Unlike", idea_like_path(@idea, like), method: :delete %>
+    <% end %>
   </div>
   <div class="reviews-main-container">
     <% if @review.errors.messages.any? %>
