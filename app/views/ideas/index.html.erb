@@ -1,0 +1,16 @@
+<div class="main-container">
+  <% if !@ideas.nil? %>
+    <div class="ideas-container">
+      <% @ideas.each do |idea| %>
+        <div class="idea border border-secondary rounded p-3">
+          <h3 class="idea-title"><%= link_to idea.title, idea_path(idea) %></h3>
+          <p class="idea-body"><%= idea.body %></p>
+          <div class="idea-info">
+            <h6>By <%= idea.user.first_name %></h6>
+            <h6>Likes: <%= idea.likers.count %></h6>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
